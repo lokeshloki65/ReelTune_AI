@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReelTune - AI Recommendations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body class="aurora-bg">
+
+    <div id="auth-container" class="auth-container">
+        <div class="aurora-overlay"></div>
+        <div class="auth-box reveal-up">
+            <h2 id="auth-title">Login</h2>
+            <div class="logo-container">
+                <i class="fas fa-film"></i>
+                <i class="fas fa-music"></i>
+            </div>
+            <p id="auth-error" class="auth-error"></p>
+            
+            <form id="login-form" class="auth-form">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="login-email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn-vibrant">Login</button>
+            </form>
+            
+            <form id="signup-form" class="auth-form" style="display: none;">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="signup-email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="signup-password" placeholder="Password (min 6 chars)" required>
+                </div>
+                <button type="submit" class="btn-vibrant">Sign Up</button>
+            </form>
+            
+            <p class="auth-toggle">
+                <span id="toggle-text">Need an account?</span>
+                <a href="#" id="auth-toggle-link">Sign Up</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="app-container" class="app-container" style="display: none;">
+        <nav class="navbar">
+            <div class="navbar-brand">
+                <i class="fas fa-wind"></i>
+                <span>ReelTune AI</span>
+            </div>
+            <div class="navbar-user">
+                <span id="user-email"></span>
+                <button id="logout-btn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            
+            <section id="recommendations-section" class="content-section reveal-up">
+                <h2 class="section-title neon-blue">
+                    <i class="fas fa-robot"></i> For You
+                </h2>
+                <p class="section-subtitle">Based on your likes. Keep liking items to improve!</p>
+                <div id="recommendations-grid" class="media-grid">
+                    </div>
+            </section>
+            
+            <section id="movies-section" class="content-section reveal-up">
+                <h2 class="section-title neon-green">
+                    <i class="fas fa-film"></i> Trending Movies
+                </h2>
+                <div id="movies-grid" class="media-grid">
+                    </div>
+            </section>
+            
+            <section id="music-section" class="content-section reveal-up">
+                <h2 class="section-title neon-purple">
+                    <i class="fas fa-music"></i> Top Hit Songs
+                </h2>
+                <div id="music-grid" class="media-grid">
+                    </div>
+            </section>
+
+        </main>
+        
+        <footer class="footer">
+            <p>ReelTune AI &copy; 2025. Powered by Flask & Firebase.</p>
+        </footer>
+    </div>
+
+    <script src="static/js/script.js"></script>
+</body>
+</html>

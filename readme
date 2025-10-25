@@ -1,0 +1,112 @@
+# ReelTune AI - Movie & Music Recommendation System
+
+ReelTune AI is a dynamic movie and music recommendation system built with a modern "Aurora" style UI. It uses a Python/Flask backend for recommendation logic and Firebase/Firestore for real-time user authentication and 'like' storage.
+
+![ReelTune AI Demo](./demo.gif)
+*(Note: Create a short GIF of your app working and name it `demo.gif` in your project folder for this to display)*
+
+---
+
+## ✨ Key Features
+
+* **Firebase User Authentication:** Secure login and signup functionality using Firebase Authentication (Email/Password).
+* **Real-time 'Likes' System:** Like and unlike items (movies/music), with your preferences saved instantly to a Cloud Firestore database.
+* **Content-Based Recommendations:** A Python backend calculates personalized recommendations based on the "tags" (e.g., genre, artist, director) of the items you like.
+* **Dynamic 'For You' Section:** A dedicated dashboard section that updates in real-time as you like or unlike more items.
+* **Modern UI/UX:** A beautiful, animated, and responsive dark-mode UI inspired by modern streaming apps.
+* **Browse Catalog:** Browse all available movies and music from the static backend database.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Backend:** Python, Flask, Flask-CORS
+* **Frontend:** HTML5, CSS3 (Aurora theme), Vanilla JavaScript
+* **Database:**
+    * **Google Firebase Authentication** (For User Management)
+    * **Google Cloud Firestore** (For saving user 'likes')
+* **Recommendation Logic:** Content-Based Filtering (Tag-matching algorithm)
+
+---
+
+## 🚀 Getting Started
+
+Follow these instructions to get the project running on your local machine.
+
+### Prerequisites
+
+* Python 3.7+
+* A Google Firebase account
+
+### 1. Backend Setup (Python)
+
+1.  Clone this repository or download the files.
+2.  Navigate to the project directory:
+    ```bash
+    cd ReelTune_AI
+    ```
+3.  Create and activate a virtual environment:
+    ```bash
+    # For macOS/Linux
+    python3 -m venv venv
+    source venv/bin/activate
+
+    # For Windows
+    python -m venv venv
+    venv\Scripts\activate
+    ```
+4.  Install the required Python packages from `requirements.txt`:
+    ```bash
+    pip install -r requirements.txt
+    ```
+5.  Run the Flask backend server:
+    ```bash
+    python app.py
+    ```
+    Your backend is now running on `http://127.0.0.1:5000`.
+
+### 2. Frontend Setup (Firebase)
+
+1.  Go to the [Firebase Console](https://console.firebase.google.com/).
+2.  Click "Add project" and create a new project.
+3.  Go to the **Authentication** tab, click "Get started", and enable **Email/Password** as a sign-in method.
+4.  Go to the **Firestore Database** tab, click "Create database", and start in **Test mode**.
+5.  Go back to your Project Overview, click the Web icon (`</>`) to "Add an app".
+6.  Register your app (give it any nickname) and Firebase will give you a `firebaseConfig` object.
+7.  Copy this `firebaseConfig` object.
+8.  Open `static/js/script.js` in your code editor.
+9.  Paste your `firebaseConfig` object at the top of the file (around line 6), replacing the placeholder.
+    ```javascript
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        // ...and so on
+    };
+    ```
+
+### 3. Run the Application
+
+1.  Make sure your Python server is still running (`python app.py`).
+2.  Open the `index.html` file (located in the `templates` folder) in your web browser.
+    * **Note:** The simplest way is to just navigate to `http://127.0.0.1:5000/` in your browser, as the Flask server is now set up to serve this file directly.
+
+---
+
+## 📁 Project Structure
+
+/ReelTune_AI │ ├── app.py # The Python Flask backend server & recommendation logic ├── requirements.txt # Python package dependencies (Flask, Flask-Cors) │ ├── templates/ │ └── index.html # The main HTML file (Login UI + App Dashboard) │ └── static/ ├── css/ │ └── style.css # All styles for the "Aurora" theme │ └── js/ └── script.js # Frontend logic: Firebase auth, Firestore, API calls
+
+
+---
+
+## ⚙️ How It Works (Logic Flow)
+
+1.  A user signs up or logs in using the `index.html` page. `script.js` communicates with **Firebase Authentication** to verify them.
+2.  Once logged in, `script.js` fetches the full catalog of movies and music from the Flask backend (`/get-all-items`).
+3.  `script.js` also fetches the user's existing 'likes' from **Cloud Firestore**.
+4.  When the user clicks a 'like' button:
+    * `script.js` instantly saves/deletes this 'like' in their **Cloud Firestore** document.
+    * It then sends the user's *complete set* of liked item IDs (e.g., `['m001', 's005']`) to the Flask backend's `/recommend` endpoint.
+5.  The **Flask backend (`app.py`)** receives this list, collects all "tags" from those liked items, and compares them against all other items in the database to find matches.
+6.  The backend returns a new, sorted list of recommendations (as JSON).
+7.  `script.js` receives this JSON list and dynamically renders the new recommendations in the "For You" section.
