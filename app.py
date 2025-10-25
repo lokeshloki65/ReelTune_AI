@@ -3,12 +3,9 @@ from flask_cors import CORS
 import json
 
 app = Flask(__name__)
-# CORS(app) allows your http://127.0.0.1:5500 (frontend) to talk to http://127.0.0.1:5000 (backend)
 CORS(app)
 
-# --- Namma Static Database (Real-time-la itha DB-la irunthu edupom, ippo prototype-kaga ingaye vechikalam) ---
 
-# Tamil Movie Database
 MOVIE_DB = {
     "m001": {"title": "Vikram", "poster": "https://upload.wikimedia.org/wikipedia/en/2/22/Vikram_film_poster.jpg", "tags": ["action", "thriller", "lokesh_kanagaraj", "kamal_haasan", "vijay_sethupathi", "fahadh_faasil"]},
     "m002": {"title": "Leo", "poster": "https://upload.wikimedia.org/wikipedia/en/7/76/Leo_2023_film_poster.jpg", "tags": ["action", "thriller", "lokesh_kanagaraj", "vijay", "sanjay_dutt"]},
@@ -22,7 +19,6 @@ MOVIE_DB = {
     "m010": {"title": "Ayan", "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Ayan_poster.jpg/220px-Ayan_poster.jpg", "tags": ["action", "thriller", "suriya", "kv_anand"]}
 }
 
-# Tamil Music Database
 MUSIC_DB = {
     "s001": {"title": "Naa Ready", "album": "Leo", "poster": "https://upload.wikimedia.org/wikipedia/en/7/76/Leo_2023_film_poster.jpg", "tags": ["fast-beat", "kuthu", "anirudh", "vijay", "lokesh_kanagaraj"]},
     "s002": {"title": "Hukum", "album": "Jailer", "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/1/11/Jailer_2023_film_poster.jpg/220px-Jailer_2023_film_poster.jpg", "tags": ["fast-beat", "mass", "anirudh", "rajinikanth", "superstar"]},
@@ -34,11 +30,9 @@ MUSIC_DB = {
     "s008": {"title": "Rowdy Baby", "album": "Maari 2", "poster": "https://upload.wikimedia.org/wikipedia/en/thumb/0/0e/Maari_2_poster.jpg/220px-Maari_2_poster.jpg", "tags": ["fast-beat", "kuthu", "yuvan_shankar_raja", "dhanush", "dhee"]},
 }
 
-# Merge both databases for easy lookup
 FULL_DB = {**MOVIE_DB, **MUSIC_DB}
 
 
-# --- PUTHU ROUTE (ITHU THAAN FIX) ---
 @app.route('/')
 def home():
     """Serves the main HTML page from the 'templates' folder."""
@@ -63,7 +57,6 @@ def recommend():
     if not liked_item_ids:
         return jsonify({"recommendations": []}) # User ethuvum like pannala-na, onnum illa.
 
-    # 1. Unga "Like" panna items-oda ella tags-ayum orey set-la collect pannunga
     user_profile_tags = set()
     for item_id in liked_item_ids:
         if item_id in FULL_DB:
@@ -73,20 +66,17 @@ def recommend():
     recommendation_scores = {}
     
     for item_id, item_details in FULL_DB.items():
-        # User already like panna item-a marubadiyum recommend panna koodathu
         if item_id in liked_item_ids:
             continue
         
-        # Intha item-oda tags-kum, user profile tags-kum evlo match iruku-nu paakalam
         item_tags = set(item_details['tags'])
         common_tags = user_profile_tags.intersection(item_tags)
         
-        score = len(common_tags) # Simple-ah, common tags-oda count thaan score
+        score = len(common_tags)
         
         if score > 0:
             recommendation_scores[item_id] = score
             
-    # 3. Score-a base panni sort pannunga (athigama irukurathu mudhalla)
     sorted_recommendations = sorted(recommendation_scores.items(), key=lambda item: item[1], reverse=True)
     
     # 4. Full item details-oda anupunga
@@ -101,4 +91,5 @@ def recommend():
 
 
 if __name__ == '__main__':
+
     app.run(debug=True, port=5000)
