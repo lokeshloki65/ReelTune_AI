@@ -1,4 +1,4 @@
-# ReelTune AI - Movie & Music Recommendation System
+   ReelTune AI - Movie & Music Recommendation System
 
 ReelTune AI is a dynamic movie and music recommendation system built with a modern "Aurora" style UI. It uses a Python/Flask backend for recommendation logic and Firebase/Firestore for real-time user authentication and 'like' storage.
 
@@ -109,4 +109,5 @@ Follow these instructions to get the project running on your local machine.
     * It then sends the user's *complete set* of liked item IDs (e.g., `['m001', 's005']`) to the Flask backend's `/recommend` endpoint.
 5.  The **Flask backend (`app.py`)** receives this list, collects all "tags" from those liked items, and compares them against all other items in the database to find matches.
 6.  The backend returns a new, sorted list of recommendations (as JSON).
+
 7.  `script.js` receives this JSON list and dynamically renders the new recommendations in the "For You" section.
